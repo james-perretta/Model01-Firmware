@@ -168,7 +168,7 @@ const Key keymaps[][ROWS][COLS] PROGMEM = {
    Consumer_VolumeIncrement,  ___, ___, Key_LeftCurlyBracket,     Key_RightCurlyBracket,    LSHIFT(Key_Backtick), Key_Delete,
    Consumer_VolumeDecrement,  ___, ___, Key_LeftParen,            Key_RightParen,           Key_Slash,
    Consumer_Mute,             ___, ___, Key_LeftBracket,          Key_RightBracket,         LSHIFT(Key_1),        LCTRL(Key_Z),
-   ___, Key_Enter, ___, ___,
+   ___, ___, ___, ___,
    ___,
 
    Key_CapsLock, Key_F6,                 Key_F7,                   Key_F8,                   Key_F9,              Key_F10,          Key_F11,
