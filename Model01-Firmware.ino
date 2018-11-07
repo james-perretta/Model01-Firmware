@@ -74,7 +74,9 @@
   */
 
 enum { MACRO_VERSION_INFO,
-       MACRO_ANY
+       MACRO_ANY,
+       MACRO_DASH_ARROW,
+       MACRO_EQUALS_ARROW
      };
 
 
@@ -165,14 +167,14 @@ const Key keymaps[][ROWS][COLS] PROGMEM = {
 
   [FUNCTION] =  KEYMAP_STACKED
   (___,                       Key_F1,            Key_F2,      Key_F3,                   Key_F4,                   Key_F5,               Key_LEDEffectNext,
-   Consumer_VolumeIncrement,  ___, ___, Key_LeftCurlyBracket,     Key_RightCurlyBracket,    LSHIFT(Key_Backtick), Key_Delete,
+   Consumer_VolumeIncrement,  ___, ___, Key_LeftCurlyBracket,     Key_RightCurlyBracket,    M(MACRO_DASH_ARROW),   Key_Delete,
    Consumer_VolumeDecrement,  ___, ___, Key_LeftParen,            Key_RightParen,           Key_Slash,
-   Consumer_Mute,             ___, ___, Key_LeftBracket,          Key_RightBracket,         LSHIFT(Key_1),        LCTRL(Key_Z),
+   Consumer_Mute,             ___, ___, Key_LeftBracket,          Key_RightBracket,         M(MACRO_EQUALS_ARROW),  LCTRL(Key_Z),
    ___, ___, ___, ___,
    ___,
 
    Key_CapsLock, Key_F6,                 Key_F7,                   Key_F8,                   Key_F9,              Key_F10,          Key_F11,
-   ___, Key_Backtick,           Key_Minus,                Key_UpArrow,              LSHIFT(Key_Equals),  ___,              Key_F12,
+   ___, Key_Backtick,           Key_Minus,                Key_UpArrow,              LSHIFT(Key_Equals),  LSHIFT(Key_Backtick),              Key_F12,
         Key_Equals,             Key_LeftArrow,            Key_DownArrow,            Key_RightArrow,      ___,              ___,
    ___, Key_Backslash,          LSHIFT(Key_Quote),        Key_Quote,                Key_Pipe,            ___,     ___,
    ___, ___, Key_Tab, ___,
@@ -212,6 +214,21 @@ static void anyKeyMacro(uint8_t keyState) {
     kaleidoscope::hid::pressKey(lastKey);
 }
 
+/* kaleidoscope::hid::isModifierKeyActive(Key_LeftShift) */
+
+static const macro_t* asciiArrowMacro(uint8_t keyState) {
+  if (keyToggledOn(keyState)) {
+    return Macros.type(PSTR("->"));
+  }
+  return MACRO_NONE;
+}
+
+static const macro_t* equalsArrowMacro(uint8_t keyState) {
+  if (keyToggledOn(keyState)) {
+    return Macros.type(PSTR("=>"));
+  }
+  return MACRO_NONE;
+}
 
 /** macroAction dispatches keymap events that are tied to a macro
     to that macro. It takes two uint8_t parameters.
@@ -234,6 +251,14 @@ const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState) {
 
   case MACRO_ANY:
     anyKeyMacro(keyState);
+    break;
+
+  case MACRO_DASH_ARROW:
+    return asciiArrowMacro(keyState);
+    break;
+
+  case MACRO_EQUALS_ARROW:
+    equalsArrowMacro(keyState);
     break;
   }
   return MACRO_NONE;
